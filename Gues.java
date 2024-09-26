@@ -4,7 +4,8 @@ import java.util.Random;
 class Main {
   public static void main(String[] args) {
     Random rand = new Random();
-    int rando = rand.nextInt(42+1);
+    int rando = rand.nextInt(42);
+    rando++;
     
     Scanner sca = new Scanner(System.in);
     System.out.println("Enter a number 0-42"); 
