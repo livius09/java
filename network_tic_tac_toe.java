@@ -62,6 +62,7 @@ public class Main {
                 if (Game.logic(tmp, 'X')){
                     in.close();
                     out.close();
+                    Game.draw();
                     break;
                 }
                 System.out.println();
@@ -104,6 +105,7 @@ public class Main {
                 if (Game.logic(tmp, 'X')){
                     in.close();
                     out.close();
+                    Game.draw();
                     break;
                 }
                 Game.draw();
