@@ -6,6 +6,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+
 
 import java.io.*;
 import java.net.*;
@@ -18,11 +30,17 @@ public class Main extends Application {
     public static Scanner sc = new Scanner(in);
     public static char[][] arr = {{'#', '#', '#'}, {'#', '#', '#'}, {'#', '#', '#'}};
     public static byte mod;
-    public static Label Top_label = new Label("-");
+
+
+    public static StringProperty message = new SimpleStringProperty("Hello, World!");
+    public static Label Top_label = new Label();
+
+
     public static byte[] tmp = {-1, -1};
 
     @Override
     public void start(Stage primaryStage) {
+        Top_label.textProperty().bind(message);
         int rows = 3, cols = 3;
 
         // Create top label
@@ -100,23 +118,23 @@ public class Main extends Application {
         launch(args);  // Start the JavaFX UI
 
         Game.draw();
-
+        //message.set("Text Updated!")
         if (mod == 2) {  // Server starts the game
             while (true) {
                 tmp[0] = -1;
                 tmp[1] = -1;
-                Platform.runLater(() -> Main.Top_label.setText("Your Move"));
+                message.set("Your Move");
 
                 // We now wait for the click asynchronously
-                synchronized (tmp) {
-                    while (tmp[0] == -1 && tmp[1] == -1) {
-                        try {
-                            tmp.wait();  // Wait until the click is registered
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
+
+                while (tmp[0] == -1 && tmp[1] == -1) {
+                    try {
+                        tmp.wait();  // Wait until the click is registered
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                     }
                 }
+
 
                 arr[tmp[0]][tmp[1]] = 'X';
                 out.write(tmp);
@@ -130,7 +148,7 @@ public class Main extends Application {
                 }
 
                 Game.draw();
-                Platform.runLater(() -> Main.Top_label.setText("waiting for other player's move"));
+                message.set("waiting for other player's move");
 
                 byte[] buffer = new byte[2];
                 int bytesRead = in.read(buffer);
@@ -147,7 +165,7 @@ public class Main extends Application {
             }
         } else {  // Client starts the game
             while (true) {
-                Platform.runLater(() -> Main.Top_label.setText("waiting for other player's move"));
+                message.set("waiting for other player's move");
 
                 byte[] buffer = new byte[2];
                 int bytesRead = in.read(buffer);
@@ -165,7 +183,7 @@ public class Main extends Application {
                 tmp[0] = -1;
                 tmp[1] = -1;
 
-                Platform.runLater(() -> Main.Top_label.setText("Your Move"));
+                message.set("Your Move");
 
                 // Wait for the click asynchronously
                 synchronized (tmp) {
@@ -192,12 +210,12 @@ public class Main extends Application {
             }
         }
 
-        Platform.runLater(() -> Main.Top_label.setText("Game over"));
+        message.set("Game over");
         socket.close();
     }
 
 
-    class Game {
+    static class Game {
         public static byte count_2d() {
             byte u = 0;
             for (char[] row : Main.arr) {
@@ -219,26 +237,26 @@ public class Main extends Application {
 
             // Check row
             if (Main.arr[y][0] == Main.arr[y][1] && Main.arr[y][0] == Main.arr[y][2] && Main.arr[y][0] != '#') {
-                Platform.runLater(() -> Main.Top_label.setText(symbol + "hat gewonnen"));
+                message.set(symbol + "hat gewonnen");
                 return true;
             }
 
             // Check column
             if (Main.arr[0][x] == Main.arr[1][x] && Main.arr[0][x] == Main.arr[2][x] && Main.arr[0][x] != '#') {
-                Platform.runLater(() -> Main.Top_label.setText(symbol + "hat gewonnen"));
+                message.set(symbol + "hat gewonnen");
                 return true;
             }
 
             // Check diagonals
             if ((Main.arr[0][0] == Main.arr[1][1] && Main.arr[0][0] == Main.arr[2][2] && Main.arr[0][0] != '#') ||
                     (Main.arr[2][0] == Main.arr[1][1] && Main.arr[2][0] == Main.arr[0][2] && Main.arr[2][0] != '#')) {
-                Platform.runLater(() -> Main.Top_label.setText(symbol + "hat gewonnen"));
+                message.set(symbol + "hat gewonnen");
                 return true;
             }
 
             // Check for draw
             if (count_2d() == 0) {
-                Platform.runLater(() -> Main.Top_label.setText("Nobody Wins its a Draw"));
+                message.set("Nobody Wins its a Draw");
                 return true;
             }
 
