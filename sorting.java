@@ -2,7 +2,8 @@ public class Main {
 
     public static void main(String[] args) {
         int[] arr={23,7,1,42,8};
-        buble_sort(arr);
+        selection_sort(arr);
+        //buble_sort(arr);
 
         for (int j : arr) {
             System.out.println(j);
@@ -22,5 +23,21 @@ public class Main {
         }
     }
 
-    
+    public static void selection_sort(int[] uarr){
+        for (int i = 0; i < uarr.length-1; i++) {
+            int min_index=i;
+            for (int k = i+1; k < uarr.length; k++) {
+                if(uarr[k] < uarr[min_index]){
+                    min_index= k;
+                }
+            }
+            int tmp = uarr[min_index];
+            uarr[min_index] = uarr[i];
+            uarr[i]=tmp;
+        }
+    }
+
+
+
+
 }
