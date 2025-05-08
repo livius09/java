@@ -12,6 +12,7 @@ public class Main {
         }
         int[] arr1 = Arrays.copyOf(arr0, arr0.length);
         int[] arr2 = Arrays.copyOf(arr0, arr0.length);
+        int[] arr3 = Arrays.copyOf(arr0, arr0.length);
 
         long startbuble = System.nanoTime();
         buble_sort(arr0);
@@ -26,10 +27,16 @@ public class Main {
         mergeSort(arr2, 0, arr2.length - 1);
         long endmerge = System.nanoTime();
 
+        long startsort = System.nanoTime();
+        Arrays.sort(arr3);
+        long endsort = System.nanoTime();
 
-        System.out.println("Time taken Bublesort (nanoseconds): " + (endbuble - startbuble));
+        System.out.println("Time taken Bublesort  (nanoseconds): " + (endbuble - startbuble));
         System.out.println("Time taken selectsort (nanoseconds): " + (endselect - startselect));
         System.out.println("Time taken mergersort (nanoseconds): " + (endmerge - startmerge));
+        System.out.println("Time taken array.sort (nanoseconds): " + (endsort - startsort));
+
+
 
 
 
